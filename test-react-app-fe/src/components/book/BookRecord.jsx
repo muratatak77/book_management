@@ -19,9 +19,10 @@ const BookRecord = (props) => {
   const [selectCategory, setSelectCategory] = useState({});
   const [formData, setFormData] = useState({});
 
-  const [formErrors, setFormErrors] = useState({ title: "", pageSize: "" });
+  const [formErrors, setFormErrors] = useState({ title: "", pageSize: "", category: "" });
   const [titleValid, setTitleValid] = useState(false);
   const [pageSizeValid, setPageSizeValid] = useState(false);
+  const [categoryValid, setCategoryValid] = useState(false);
   const [formValid, setFormValid] = useState(false);
   const [validated, setValidated] = useState(false);
 
@@ -49,7 +50,6 @@ const BookRecord = (props) => {
   const addBook = async (data) => {
     try {
       await client.post("/books", data);
-      setIsLoading(false);
       window.location.href = "/books";
     } catch (error) {
       setIsLoading(false);
@@ -62,10 +62,12 @@ const BookRecord = (props) => {
     if (!form.checkValidity()) {
       e.preventDefault();
       e.stopPropagation();
+      validateField("title", e.target.title.value )
+      validateField("pageSize", e.target.pageSize.value )
+      validateField("category", e.target.category.value )
     } else {
       setIsLoading(true);
       e.preventDefault();
-      console.log(formData);
       let data = {
         title: title,
         page_size: pageSize,
@@ -78,6 +80,7 @@ const BookRecord = (props) => {
 
   const onCategorySelect = (e) => {
     setSelectCategory(e);
+    validateField('category', e.value);
   };
 
   const onInputChange = (e) => {
@@ -92,35 +95,39 @@ const BookRecord = (props) => {
     let fieldValidationErrors = formErrors;
     let titleValidP = titleValid;
     let pageSizeValidP = pageSizeValid;
-
-    console.log(value);
+    let categoryValidP = categoryValid;
 
     switch (fieldName) {
       case "title":
         titleValidP = value.length >= 3;
-        fieldValidationErrors.title = titleValidP
-          ? ""
-          : "Title is invalid. At least 3 letters.";
+        console.log("titleValidP : ", titleValidP);
+        fieldValidationErrors.title = titleValidP ? "" : "Title is invalid. At least 3 letters.";
         break;
       case "pageSize":
         pageSizeValidP = value.length > 0;
+        console.log("pageSizeValidP : ", pageSizeValidP);
         fieldValidationErrors.pageSize = pageSizeValidP ? "" : " is invalid";
+        break;
+      case "category":
+        categoryValidP = value.length > 0;
+        console.log("categoryValidP : ", categoryValidP);
+        fieldValidationErrors.category =  categoryValidP ? "" : "Please select a category!";
         break;
       default:
         break;
     }
-
     setFormErrors(fieldValidationErrors);
     setTitleValid(titleValidP);
     setPageSizeValid(pageSizeValidP);
-    let formValid = titleValidP && pageSizeValidP;
+    setCategoryValid(categoryValidP);
+    let formValid = titleValidP && pageSizeValidP && categoryValidP;
     setFormValid(formValid);
   };
 
   const errorClass = (error) => {
     if (error && error.length > 0) {
       return (
-        <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+        <div className="invalid-feedback-2">{error}</div>
       );
     }
   };
@@ -144,6 +151,9 @@ const BookRecord = (props) => {
           onChange={(e) => onInputChange(e)}
         />
         {errorClass(formErrors.title)}
+        {/* <Form.Control.Feedback type="invalid">
+          Title is invalid. At least 3 letters.
+        </Form.Control.Feedback> */}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="validationCustom05">
@@ -163,7 +173,8 @@ const BookRecord = (props) => {
 
       <Form.Group className="mb-3">
         <Form.Label>Book Category</Form.Label>
-        <Select onChange={onCategorySelect} options={categories} />
+        <Select name="category" onChange={onCategorySelect} options={categories} />
+        {errorClass(formErrors.category)}
       </Form.Group>
 
       <Button variant="primary" type="submit">

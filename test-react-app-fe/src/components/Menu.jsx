@@ -5,8 +5,8 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link } from "react-router-dom";
+// import NavDropdown from 'react-bootstrap/NavDropdown';
+// import { Link } from "react-router-dom";
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
 //
@@ -26,7 +26,7 @@ export default function Menu() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/books">Books</Nav.Link>
-            <Nav.Link href="/book_record">Book Record</Nav.Link>
+            <Nav.Link href="/book_record">New Book</Nav.Link>
           </Nav>
         </Navbar.Collapse>
 

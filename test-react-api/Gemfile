@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.4'
+ruby '2.7.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.7'
@@ -27,7 +29,9 @@ gem 'rack-cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  # gem 'gem ', github: 'deivid-rodriguez/byebug'
+
 end
 
 group :development do
@@ -37,5 +41,21 @@ group :development do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'active_model_serializers'
+gem 'bullet', group: 'development'
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'will_paginate', '~> 3.3'
+
+group :development, :test do
+  gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 6.0.0'
+  gem 'shoulda-matchers'
+end
+
+group :test do
+  gem 'factory_bot_rails'
+  gem 'faker'
+end
+
+gem 'graphiql-rails'
+gem "graphql"

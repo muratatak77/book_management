@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 const BookList = () => {
-  const itemsPerPage = 4;
+  const itemsPerPage = 5;
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentItems, setCurrentItems] = useState([]);
@@ -46,6 +46,7 @@ const BookList = () => {
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
+
     console.log(`User requested page number ${event.selected+1}`);
     loadItems.current(parseInt(event.selected+1));
     setActivePage(event.selected+1)

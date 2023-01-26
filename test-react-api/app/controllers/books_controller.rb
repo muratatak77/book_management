@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :update, :destroy]
+  before_action :set_book, only: %i[show update destroy]
 
   # GET /books
   def index
-
-    books = Book.order("created_at DESC").paginate(page: params[:page])
-    books_count = Book.all.size
-
-    render json: { data: books , data_count: books_count }
+    books = Book.includes(:author).order('created_at DESC').paginate(page: params[:page])
+    render json: {
+      data: ActiveModelSerializers::SerializableResource.new(books),
+      data_count: Book.all.size
+    }
   end
 
   # GET /books/1
@@ -17,9 +19,9 @@ class BooksController < ApplicationController
 
   def category_list
     list = [
-      { value: "category1", label: "CATEGORY1" },
-      { value: "category2", label: "CATEGORY2" },
-      { value: "category3", label: "CATEGORY3" },
+      { value: 'category1', label: 'CATEGORY1' },
+      { value: 'category2', label: 'CATEGORY2' },
+      { value: 'category3', label: 'CATEGORY3' }
     ]
     render json: list
   end
@@ -50,13 +52,14 @@ class BooksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_book
-      @book = Book.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def book_params
-      params.require(:book).permit(:title, :page_size, :category)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_book
+    @book = Book.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def book_params
+    params.require(:book).permit(:title, :page_size, :category)
+  end
 end

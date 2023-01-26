@@ -50,3 +50,10 @@
     transform: rotate(360deg);
   }
 }
+
+.invalid-feedback-2 {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #dc3545;
+}
